@@ -48,6 +48,14 @@ function validateLine(line) {
   if (line !== line.trim()) {
     throw new Error('Line must not start or end with whitespace.');
   }
+  // No tab or control characters: the entry is plain visible text.
+  if (/[\t\x00-\x1f\x7f]/.test(line)) {
+    throw new Error('Line must not contain tabs or control characters.');
+  }
+  // No links: the competition allows one line of text and nothing else.
+  if (/https?:\/\//i.test(line) || /www\./i.test(line)) {
+    throw new Error('Line must not contain a link.');
+  }
 }
 
 validateLine(REPLY);
